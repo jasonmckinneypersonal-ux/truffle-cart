@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="assets/hero-truffle.webp" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -97,6 +98,7 @@
   .img-slot::after{content:attr(data-shot);position:absolute;inset:auto 14px 14px 14px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#7C736A}
   .img-slot::before{content:"◐";position:absolute;top:14px;left:14px;font-size:14px;color:#5C544A}
   .img-slot.has-img::before,.img-slot.has-img::after{display:none}
+  .img-slot.has-img{background-size:cover;background-position:center}
   .img-slot img,.img-slot video{width:100%;height:100%;object-fit:cover}
   .hero-img{aspect-ratio:4/5;position:relative}
   .hero-img video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -400,9 +402,9 @@
     </div>
     <div>
       <div class="hero-img img-slot has-img">
-        <video src="assets/VIDEO-01.mp4" poster="assets/hero-truffle.png" autoplay muted loop playsinline aria-label="Macro video loop of a fresh black truffle"></video>
+        <video src="assets/VIDEO-01.mp4" poster="assets/hero-truffle.webp" preload="none" muted loop playsinline aria-label="Macro video loop of a fresh black truffle"></video>
         <span class="hero-img-tag">Just dug · Wk 19</span>
-        <button class="hero-img-toggle" type="button" data-video-toggle>Pause</button>
+        <button class="hero-img-toggle" type="button" data-video-toggle>Play</button>
         <div class="hero-img-meta">
           <span>Tuber Melanosporum · Périgord, FR</span>
           <span>34.6 g</span>
@@ -430,7 +432,7 @@
   <div class="var-grid">
     <article class="var">
       <span class="badge green">JUST DUG</span>
-      <div class="img-slot has-img" role="img" aria-label="Black Summer truffle on parchment paper" style="background-image:url('assets/SHOT-02.png');background-size:cover;background-position:center"></div>
+      <div class="img-slot has-img lazy-bg" role="img" aria-label="Black Summer truffle on parchment paper" data-bg="assets/SHOT-02.webp"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -446,7 +448,7 @@
 
     <article class="var">
       <span class="badge">RARE</span>
-      <div class="img-slot has-img" role="img" aria-label="Half-cut Bianchetto truffle with marbled interior" style="background-image:url('assets/SHOT-03.png');background-size:cover;background-position:center"></div>
+      <div class="img-slot has-img lazy-bg" role="img" aria-label="Half-cut Bianchetto truffle with marbled interior" data-bg="assets/SHOT-03.webp"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -462,7 +464,7 @@
 
     <article class="var">
       <span class="badge green">BEST SELLER</span>
-      <div class="img-slot has-img" role="img" aria-label="Dark amber jar of black truffle tartufata sauce" style="background-image:url('assets/SHOT-04.png');background-size:cover;background-position:center"></div>
+      <div class="img-slot has-img lazy-bg" role="img" aria-label="Dark amber jar of black truffle tartufata sauce" data-bg="assets/SHOT-04.webp"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -477,7 +479,7 @@
     </article>
 
     <article class="var">
-      <div class="img-slot has-img" role="img" aria-label="Cultured truffle butter coin on dark slate" style="background-image:url('assets/SHOT-05.png');background-size:cover;background-position:center"></div>
+      <div class="img-slot has-img lazy-bg" role="img" aria-label="Cultured truffle butter coin on dark slate" data-bg="assets/SHOT-05.webp"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -493,7 +495,7 @@
 
     <article class="var">
       <span class="badge">PRO</span>
-      <div class="img-slot has-img" role="img" aria-label="Brass and walnut truffle shaver on dark linen" style="background-image:url('assets/SHOT-06.png');background-size:cover;background-position:center"></div>
+      <div class="img-slot has-img lazy-bg" role="img" aria-label="Brass and walnut truffle shaver on dark linen" data-bg="assets/SHOT-06.webp"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -509,7 +511,7 @@
 
     <article class="var">
       <span class="badge">GIFT</span>
-      <div class="img-slot has-img" role="img" aria-label="Open matte black starter kit with jars, truffle, and shaver" style="background-image:url('assets/SHOT-07.png');background-size:cover;background-position:center"></div>
+      <div class="img-slot has-img lazy-bg" role="img" aria-label="Open matte black starter kit with jars, truffle, and shaver" data-bg="assets/SHOT-07.webp"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -527,7 +529,7 @@
 
 <!-- HUNTER FEATURE -->
 <section class="hunter-feature" id="hunters">
-  <div class="hunter-img" style="background-image:url('assets/hunter.png')">
+  <div class="hunter-img lazy-bg" data-bg="assets/hunter.webp">
     <div class="hunter-overlay">
       <div class="hunter-tag mono">Marco · Umbria · 23 yrs hunting</div>
       <h3>Meet the people who <em>actually</em><br>get up at 4am for your dinner.</h3>
@@ -683,7 +685,7 @@
     <article class="proof-card">
       <div class="visual">
         <span class="label">Cold-chain proof</span>
-        <img src="assets/SHOT-09.png" alt="Opened cold-chain shipping box with truffle, gel pack, and temperature card">
+        <img data-src="assets/SHOT-09.webp" alt="Opened cold-chain shipping box with truffle, gel pack, and temperature card" loading="lazy" decoding="async">
       </div>
       <div class="copy">
         <h4>The box arrives cold.</h4>
@@ -693,7 +695,7 @@
     <article class="proof-card">
       <div class="visual tall">
         <span class="label">Shave loop</span>
-        <video src="assets/VIDEO-02.mp4" poster="assets/SHOT-10.png" muted loop playsinline controls></video>
+        <video src="assets/VIDEO-02.mp4" data-poster="assets/SHOT-10.webp" preload="none" muted loop playsinline controls></video>
       </div>
       <div class="copy">
         <h4>Thin enough to melt.</h4>
@@ -703,7 +705,7 @@
     <article class="proof-card">
       <div class="visual tall">
         <span class="label">Unbox loop</span>
-        <video src="assets/VIDEO-03.mp4" poster="assets/SHOT-09.png" muted loop playsinline controls></video>
+        <video src="assets/VIDEO-03.mp4" data-poster="assets/SHOT-09.webp" preload="none" muted loop playsinline controls></video>
       </div>
       <div class="copy">
         <h4>The arrival ritual.</h4>
@@ -882,6 +884,40 @@
     checkout: ['Checkout request', 'This prototype cart is clickable and stateful. The next step is wiring it to Shopify, Stripe, or the owner’s preferred checkout.', [{label:'Email order', href:'mailto:hello@kingpingourmet.com?subject=Kingpin%20Gourmet%20order'}, {label:'Close'}]]
   };
 
+  const loadLazyMedia = () => {
+    const lazyNodes = document.querySelectorAll('[data-bg], [data-src], [data-poster]');
+    const load = node => {
+      if (node.dataset.bg) {
+        node.style.backgroundImage = `url("${node.dataset.bg}")`;
+        delete node.dataset.bg;
+      }
+      if (node.dataset.src) {
+        node.src = node.dataset.src;
+        delete node.dataset.src;
+      }
+      if (node.dataset.poster) {
+        node.poster = node.dataset.poster;
+        delete node.dataset.poster;
+      }
+      node.classList.add('is-loaded');
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      lazyNodes.forEach(load);
+      return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        load(entry.target);
+        observer.unobserve(entry.target);
+      });
+    }, {rootMargin: '700px 0px'});
+
+    lazyNodes.forEach(node => observer.observe(node));
+  };
+
   document.addEventListener('click', event => {
     const add = event.target.closest('.add');
     if (add) {
@@ -945,6 +981,7 @@
     }
   });
   renderCart();
+  loadLazyMedia();
 })();
 </script>
 
