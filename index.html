@@ -16,11 +16,12 @@
     --rule: rgba(239,233,221,.16);
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
   html,body{background:var(--char);color:var(--bone);font-family:"Cormorant Garamond",serif;font-weight:400;-webkit-font-smoothing:antialiased}
   ::selection{background:var(--ember);color:var(--bone)}
   .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.04em;text-transform:uppercase;font-size:11px}
   a{color:inherit;text-decoration:none}
-  img{max-width:100%;display:block}
+  img,video{max-width:100%;display:block}
   button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
   /* ============ ANNOUNCEMENT BAR ============ */
@@ -96,10 +97,13 @@
   .img-slot::after{content:attr(data-shot);position:absolute;inset:auto 14px 14px 14px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#7C736A}
   .img-slot::before{content:"◐";position:absolute;top:14px;left:14px;font-size:14px;color:#5C544A}
   .img-slot.has-img::before,.img-slot.has-img::after{display:none}
+  .img-slot img,.img-slot video{width:100%;height:100%;object-fit:cover}
   .hero-img{aspect-ratio:4/5;position:relative}
+  .hero-img video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .hero-img-tag{position:absolute;top:14px;left:14px;background:var(--char);border:1px solid var(--ember);color:var(--ember);font-family:"IBM Plex Mono",monospace;font-size:10px;padding:5px 9px 4px;letter-spacing:.12em;text-transform:uppercase;z-index:2}
   .hero-img-meta{position:absolute;bottom:14px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:end;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bone);z-index:2}
   .hero-img-meta span:last-child{color:var(--bone-2);font-weight:600}
+  .hero-img-toggle{position:absolute;top:14px;right:14px;z-index:3;background:rgba(11,10,9,.72);border:1px solid var(--rule);padding:6px 9px 5px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
 
   /* trust strip */
   .trust-strip{
@@ -124,7 +128,8 @@
   .var-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
   .var{position:relative;display:flex;flex-direction:column;background:#100E0C;border:1px solid var(--rule);transition:border-color .2s ease, transform .2s ease}
   .var:hover{border-color:rgba(239,233,221,.4);transform:translateY(-2px)}
-  .var .ph{aspect-ratio:1/1}
+  .var .img-slot{aspect-ratio:1/1}
+  .var.is-focused{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember)}
   .var-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:14px}
   .var-row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
   .var .latin{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;color:#9C9486;text-transform:uppercase;margin-bottom:6px}
@@ -169,6 +174,16 @@
   .review p em{font-style:italic;color:#C8B68A}
   .review .by{margin-top:auto;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9C9486;display:flex;justify-content:space-between;border-top:1px solid var(--rule);padding-top:14px}
   .review .by b{color:var(--bone);font-weight:600}
+
+  .proof-media{display:grid;grid-template-columns:1.15fr .9fr .9fr;gap:24px;margin-top:36px}
+  .proof-card{border:1px solid var(--rule);background:#100E0C;display:flex;flex-direction:column}
+  .proof-card .visual{position:relative;aspect-ratio:4/5;overflow:hidden;background:#0E0C0A}
+  .proof-card .visual.tall{aspect-ratio:9/16}
+  .proof-card img,.proof-card video{width:100%;height:100%;object-fit:cover}
+  .proof-card .copy{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px}
+  .proof-card h4{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:28px;line-height:1}
+  .proof-card p{font-size:15px;line-height:1.45;color:#A99B7E;font-weight:300}
+  .proof-card .label{position:absolute;top:12px;left:12px;background:rgba(11,10,9,.82);border:1px solid var(--ember);color:var(--ember);padding:5px 8px 4px;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;z-index:2}
 
   /* aggregate review row */
   .review-agg{
@@ -233,9 +248,40 @@
   /* ============ STICKY MOBILE BUY ============ */
   .sticky-buy{display:none}
 
+  .cart-overlay,.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.56);z-index:95;opacity:0;pointer-events:none;transition:opacity .2s ease}
+  .cart-panel{position:fixed;top:0;right:0;width:min(420px,100vw);height:100vh;background:#100E0C;border-left:1px solid var(--rule);z-index:100;transform:translateX(100%);transition:transform .24s ease;display:flex;flex-direction:column}
+  body.cart-open .cart-overlay{opacity:1;pointer-events:auto}
+  body.cart-open .cart-panel{transform:translateX(0)}
+  .cart-head{display:flex;align-items:center;justify-content:space-between;padding:22px;border-bottom:1px solid var(--rule)}
+  .cart-head h3{font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:400;letter-spacing:-.01em}
+  .icon-btn{width:34px;height:34px;border:1px solid var(--rule);display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:18px}
+  .cart-items{padding:18px 22px;display:flex;flex-direction:column;gap:12px;overflow:auto;flex:1}
+  .cart-item{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule)}
+  .cart-item h4{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:400}
+  .cart-item p{font-family:"IBM Plex Mono",monospace;font-size:10px;color:#9C9486;letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+  .cart-item .qty{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+  .cart-item button{border:1px solid var(--rule);width:28px;height:28px;font-family:"IBM Plex Mono",monospace}
+  .cart-foot{padding:20px 22px 24px;border-top:1px solid var(--rule);display:flex;flex-direction:column;gap:14px}
+  .cart-total{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#A99B7E}
+  .cart-total b{font-family:"Cormorant Garamond",serif;color:var(--bone);font-size:28px;font-weight:500;letter-spacing:0;text-transform:none}
+  .checkout{background:var(--ember);color:var(--bone);padding:15px 16px 13px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+  .empty{color:#9C9486;font-size:18px;line-height:1.4;padding-top:10px}
+  .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%);width:min(520px,calc(100vw - 36px));background:#100E0C;border:1px solid var(--rule);z-index:110;opacity:0;pointer-events:none;transition:opacity .18s ease, transform .18s ease}
+  body.modal-open .modal-overlay{opacity:1;pointer-events:auto}
+  body.modal-open .modal{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--rule)}
+  .modal h3{font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:400;letter-spacing:-.01em}
+  .modal-body{padding:22px;color:#C9C2B2;font-size:18px;line-height:1.5}
+  .modal-actions{padding:0 22px 22px;display:flex;gap:10px;flex-wrap:wrap}
+  .modal-actions a,.modal-actions button{border:1px solid var(--bone);padding:12px 14px 10px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:var(--bone);color:var(--char);z-index:130;padding:12px 16px 10px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:0;pointer-events:none;transition:opacity .18s ease, transform .18s ease}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  footer .colophon a{color:#7C736A}
+  footer .colophon a:hover{color:var(--ember)}
+
   @media (max-width:900px){
     .hero-grid{grid-template-columns:1fr;gap:32px;padding:40px 0 24px}
-    .var-grid,.review-grid{grid-template-columns:1fr}
+    .var-grid,.review-grid,.proof-media{grid-template-columns:1fr}
     .pillars-grid{grid-template-columns:1fr 1fr}
     .pillar{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);min-height:200px}
     .pillar:nth-child(2){border-right:none}
@@ -253,7 +299,7 @@
   }
 </style>
 </head>
-<body>
+<body id="top">
 
 <!-- ANNOUNCEMENT -->
 <div class="anno">Free overnight shipping on orders ≥ <b>$120</b> · This week's harvest closes Fri 6pm EST</div>
@@ -266,11 +312,11 @@
     <a class="mono" href="#reviews">Reviews</a>
     <a class="mono" href="#faq">FAQ</a>
   </div>
-  <a class="brand" href="#">Kingpin<i>·</i>Gourmet</a>
+  <a class="brand" href="#top">Kingpin<i>·</i>Gourmet</a>
   <div class="right">
-    <span class="pill live mono">Sourcing live</span>
+    <button class="pill live mono" type="button" data-info="sourcing">Sourcing live</button>
     <a class="btn-shop" href="#shop">Shop now →</a>
-    <a class="cart" href="#"><span class="mono">Cart</span><b>02</b></a>
+    <button class="cart" type="button" data-cart-open><span class="mono">Cart</span><b data-cart-count>0</b></button>
   </div>
 </nav>
 
@@ -300,8 +346,10 @@
       </div>
     </div>
     <div>
-      <div class="hero-img img-slot has-img" style="background-image:url('assets/hero-truffle.png');background-size:cover;background-position:center">
+      <div class="hero-img img-slot has-img">
+        <video src="assets/VIDEO-01.mp4" poster="assets/hero-truffle.png" autoplay muted loop playsinline aria-label="Macro video loop of a fresh black truffle"></video>
         <span class="hero-img-tag">Just dug · Wk 19</span>
+        <button class="hero-img-toggle" type="button" data-video-toggle>Pause</button>
         <div class="hero-img-meta">
           <span>Tuber Melanosporum · Périgord, FR</span>
           <span>34.6 g</span>
@@ -329,7 +377,7 @@
   <div class="var-grid">
     <article class="var">
       <span class="badge green">JUST DUG</span>
-      <div class="img-slot ph" data-shot="single summer truffle on parchment, top-down"></div>
+      <div class="img-slot has-img"><img src="assets/SHOT-02.png" alt="Black Summer truffle on parchment paper" loading="lazy"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -339,13 +387,13 @@
           <div class="price">$48<small>per 10g</small></div>
         </div>
         <div class="stock"><span class="lim">◐ Only 12 left</span><span class="rev">★ <b>4.9</b> · 412</span></div>
-        <button class="add">Add 10g to cart <span>→</span></button>
+        <button class="add" data-product="Black Summer" data-latin="Tuber aestivum · Umbria, IT" data-price="48" data-unit="10g">Add 10g to cart <span>→</span></button>
       </div>
     </article>
 
     <article class="var">
       <span class="badge">RARE</span>
-      <div class="img-slot ph" data-shot="half-cut bianchetto, marbled interior"></div>
+      <div class="img-slot has-img"><img src="assets/SHOT-03.png" alt="Half-cut Bianchetto truffle with marbled interior" loading="lazy"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -355,13 +403,13 @@
           <div class="price">$72<small>per 10g</small></div>
         </div>
         <div class="stock"><span class="lim">◐ Only 3 left</span><span class="rev">★ <b>4.8</b> · 88</span></div>
-        <button class="add">Add 10g to cart <span>→</span></button>
+        <button class="add" data-product="Bianchetto" data-latin="Tuber borchii · Istria, HR" data-price="72" data-unit="10g">Add 10g to cart <span>→</span></button>
       </div>
     </article>
 
     <article class="var">
       <span class="badge green">BEST SELLER</span>
-      <div class="img-slot ph" data-shot="tartufata jar, dark glass, side light"></div>
+      <div class="img-slot has-img"><img src="assets/SHOT-04.png" alt="Dark amber jar of black truffle tartufata sauce" loading="lazy"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -371,12 +419,12 @@
           <div class="price">$32<small>per jar</small></div>
         </div>
         <div class="stock"><span class="ok">● In stock</span><span class="rev">★ <b>4.9</b> · 1,204</span></div>
-        <button class="add">Add to cart <span>→</span></button>
+        <button class="add" data-product="Tartufata Sauce" data-latin="Preserved · 80g jar" data-price="32" data-unit="jar">Add to cart <span>→</span></button>
       </div>
     </article>
 
     <article class="var">
-      <div class="img-slot ph" data-shot="truffle butter coin on slate"></div>
+      <div class="img-slot has-img"><img src="assets/SHOT-05.png" alt="Cultured truffle butter coin on dark slate" loading="lazy"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -386,13 +434,13 @@
           <div class="price">$28<small>per 120g</small></div>
         </div>
         <div class="stock"><span class="ok">● In stock</span><span class="rev">★ <b>4.9</b> · 622</span></div>
-        <button class="add">Add to cart <span>→</span></button>
+        <button class="add" data-product="Truffle Butter" data-latin="Cultured · 120g" data-price="28" data-unit="120g">Add to cart <span>→</span></button>
       </div>
     </article>
 
     <article class="var">
       <span class="badge">PRO</span>
-      <div class="img-slot ph" data-shot="brass and walnut truffle shaver"></div>
+      <div class="img-slot has-img"><img src="assets/SHOT-06.png" alt="Brass and walnut truffle shaver on dark linen" loading="lazy"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -402,13 +450,13 @@
           <div class="price">$184<small>each</small></div>
         </div>
         <div class="stock"><span class="ok">● In stock</span><span class="rev">★ <b>5.0</b> · 71</span></div>
-        <button class="add">Add to cart <span>→</span></button>
+        <button class="add" data-product="The Shaver" data-latin="Tool · brass + walnut" data-price="184" data-unit="each">Add to cart <span>→</span></button>
       </div>
     </article>
 
     <article class="var">
       <span class="badge">GIFT</span>
-      <div class="img-slot ph" data-shot="open black gift box with three jars + truffle"></div>
+      <div class="img-slot has-img"><img src="assets/SHOT-07.png" alt="Open matte black starter kit with jars, truffle, and shaver" loading="lazy"></div>
       <div class="var-body">
         <div class="var-row">
           <div>
@@ -418,14 +466,14 @@
           <div class="price">$240<small>per kit</small></div>
         </div>
         <div class="stock"><span class="ok">● In stock</span><span class="rev">★ <b>4.9</b> · 318</span></div>
-        <button class="add">Add to cart <span>→</span></button>
+        <button class="add" data-product="Starter Kit" data-latin="The Hunter's Kit · ships in box" data-price="240" data-unit="kit">Add to cart <span>→</span></button>
       </div>
     </article>
   </div>
 </section>
 
 <!-- HUNTER FEATURE -->
-<section class="hunter-feature">
+<section class="hunter-feature" id="hunters">
   <div class="hunter-img" style="background-image:url('assets/hunter.png')">
     <div class="hunter-overlay">
       <div class="hunter-tag mono">Marco · Umbria · 23 yrs hunting</div>
@@ -518,6 +566,39 @@
       <p>I've been buying from them for six years. Two delays in six years. Both times <em>they refunded before I noticed.</em></p>
       <div class="by"><b>Antoine R.</b> · Restaurant owner, Chicago</div>
     </div>
+  </div>
+
+  <div class="proof-media" id="media">
+    <article class="proof-card">
+      <div class="visual">
+        <span class="label">Cold-chain proof</span>
+        <img src="assets/SHOT-09.png" alt="Opened cold-chain shipping box with truffle, gel pack, and temperature card" loading="lazy">
+      </div>
+      <div class="copy">
+        <h4>The box arrives cold.</h4>
+        <p>Foam insert, vacuum bag, gel pack, temperature card. The proof is visible before you open the truffle.</p>
+      </div>
+    </article>
+    <article class="proof-card">
+      <div class="visual tall">
+        <span class="label">Shave loop</span>
+        <video src="assets/VIDEO-02.mp4" poster="assets/SHOT-10.png" muted loop playsinline controls></video>
+      </div>
+      <div class="copy">
+        <h4>Thin enough to melt.</h4>
+        <p>A quick social cut built from the tajarin shot for product detail and motion.</p>
+      </div>
+    </article>
+    <article class="proof-card">
+      <div class="visual tall">
+        <span class="label">Unbox loop</span>
+        <video src="assets/VIDEO-03.mp4" poster="assets/SHOT-09.png" muted loop playsinline controls></video>
+      </div>
+      <div class="copy">
+        <h4>The arrival ritual.</h4>
+        <p>Short vertical cart-abandon creative with the cold-chain packaging front and center.</p>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -719,20 +800,20 @@
     <div>
       <h5>Shop</h5>
       <ul>
-        <li><a href="#">Fresh truffles</a></li>
-        <li><a href="#">Sauces &amp; oils</a></li>
-        <li><a href="#">Tools</a></li>
-        <li><a href="#">Gift kits</a></li>
-        <li><a href="#">Subscribe</a></li>
+        <li><a href="#shop" data-focus-product="Black Summer">Fresh truffles</a></li>
+        <li><a href="#shop" data-focus-product="Tartufata Sauce">Sauces &amp; oils</a></li>
+        <li><a href="#shop" data-focus-product="The Shaver">Tools</a></li>
+        <li><a href="#shop" data-focus-product="Starter Kit">Gift kits</a></li>
+        <li><a href="#shop" data-info="subscribe">Subscribe</a></li>
       </ul>
     </div>
     <div>
       <h5>The House</h5>
       <ul>
-        <li><a href="#">How it works</a></li>
-        <li><a href="#">Hunters</a></li>
-        <li><a href="#">Wholesale</a></li>
-        <li><a href="#">Track order</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#hunters">Hunters</a></li>
+        <li><a href="mailto:chefs@kingpingourmet.com?subject=Wholesale%20truffle%20account">Wholesale</a></li>
+        <li><a href="#track" data-info="track">Track order</a></li>
       </ul>
     </div>
     <div>
@@ -740,15 +821,161 @@
       <ul>
         <li><a href="mailto:hello@kingpingourmet.com">hello@kingpingourmet.com</a></li>
         <li><a href="tel:+18889875533">+1 888 987 5533</a></li>
-        <li><a href="#">Chef line · 24h</a></li>
+        <li><a href="mailto:chefs@kingpingourmet.com?subject=Chef%20line%20request">Chef line · 24h</a></li>
       </ul>
     </div>
   </div>
   <div class="colophon">
     <span>© 2026 Kingpin Gourmet · Terra Ross Ltd</span>
-    <span>Privacy · Terms · Shipping</span>
+    <span><a href="#privacy" data-info="privacy">Privacy</a> · <a href="#terms" data-info="terms">Terms</a> · <a href="#shipping" data-info="shipping">Shipping</a></span>
   </div>
 </footer>
+
+<div class="cart-overlay" data-cart-close></div>
+<aside class="cart-panel" aria-label="Cart">
+  <div class="cart-head">
+    <h3>Your box</h3>
+    <button class="icon-btn" type="button" data-cart-close aria-label="Close cart">×</button>
+  </div>
+  <div class="cart-items" data-cart-items></div>
+  <div class="cart-foot">
+    <div class="cart-total"><span>Estimated total</span><b data-cart-total>$0</b></div>
+    <button class="checkout" type="button" data-info="checkout">Checkout request</button>
+  </div>
+</aside>
+
+<div class="modal-overlay" data-modal-close></div>
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-head">
+    <h3 id="modal-title">Kingpin Gourmet</h3>
+    <button class="icon-btn" type="button" data-modal-close aria-label="Close modal">×</button>
+  </div>
+  <div class="modal-body" data-modal-body></div>
+  <div class="modal-actions" data-modal-actions></div>
+</div>
+<div class="toast" data-toast></div>
+
+<script>
+(() => {
+  const cart = new Map();
+  const count = document.querySelector('[data-cart-count]');
+  const items = document.querySelector('[data-cart-items]');
+  const total = document.querySelector('[data-cart-total]');
+  const toast = document.querySelector('[data-toast]');
+  const modalTitle = document.querySelector('#modal-title');
+  const modalBody = document.querySelector('[data-modal-body]');
+  const modalActions = document.querySelector('[data-modal-actions]');
+
+  const money = value => `$${value.toLocaleString()}`;
+  const flash = message => {
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(flash.timer);
+    flash.timer = setTimeout(() => toast.classList.remove('show'), 1800);
+  };
+  const renderCart = () => {
+    let qty = 0;
+    let sum = 0;
+    items.innerHTML = '';
+    cart.forEach(item => {
+      qty += item.qty;
+      sum += item.qty * item.price;
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML = `<div><h4>${item.name}</h4><p>${item.latin} · ${money(item.price)} / ${item.unit}</p></div>
+        <div class="qty"><button type="button" data-dec="${item.name}">−</button><span>${item.qty}</span><button type="button" data-inc="${item.name}">+</button></div>`;
+      items.appendChild(row);
+    });
+    if (!qty) items.innerHTML = '<p class="empty">Your box is empty. Add a fresh truffle or kit from this week’s harvest.</p>';
+    count.textContent = qty;
+    total.textContent = money(sum);
+  };
+  const openCart = () => document.body.classList.add('cart-open');
+  const closeCart = () => document.body.classList.remove('cart-open');
+  const openModal = (title, body, actions = []) => {
+    modalTitle.textContent = title;
+    modalBody.innerHTML = body;
+    modalActions.innerHTML = actions.map(action => action.href
+      ? `<a href="${action.href}">${action.label}</a>`
+      : `<button type="button" data-modal-close>${action.label}</button>`).join('');
+    document.body.classList.add('modal-open');
+  };
+  const closeModal = () => document.body.classList.remove('modal-open');
+  const info = {
+    sourcing: ['Sourcing live', 'This static demo simulates the buyer-facing sourcing status: weekly harvest window, hunter network, live stock counts, and cold-chain proof.'],
+    subscribe: ['Season alerts', 'Subscription interest captured. In production this would open the seasonal delivery flow and SMS harvest alerts.', [{label:'Shop harvest', href:'#shop'}, {label:'Close'}]],
+    track: ['Track order', 'Tracking is mocked for this handoff. A production build would connect this action to shipment lookup by email or order number.', [{label:'Email support', href:'mailto:hello@kingpingourmet.com?subject=Order%20tracking'}, {label:'Close'}]],
+    privacy: ['Privacy', 'Demo privacy page: no analytics, pixels, or third-party tracking scripts were added.'],
+    terms: ['Terms', 'Demo terms page: freshness guarantee, cold-chain delivery, refund, and replacement policies would live here.'],
+    shipping: ['Shipping', 'Overnight shipping is free over $120. Fresh truffles ship in EPP foam with gel packs and temperature card.'],
+    checkout: ['Checkout request', 'This prototype cart is clickable and stateful. The next step is wiring it to Shopify, Stripe, or the owner’s preferred checkout.', [{label:'Email order', href:'mailto:hello@kingpingourmet.com?subject=Kingpin%20Gourmet%20order'}, {label:'Close'}]]
+  };
+
+  document.addEventListener('click', event => {
+    const add = event.target.closest('.add');
+    if (add) {
+      const name = add.dataset.product;
+      const item = cart.get(name) || {name, latin: add.dataset.latin, price: Number(add.dataset.price), unit: add.dataset.unit, qty: 0};
+      item.qty += 1;
+      cart.set(name, item);
+      renderCart();
+      openCart();
+      flash(`${name} added`);
+    }
+    const inc = event.target.closest('[data-inc]');
+    const dec = event.target.closest('[data-dec]');
+    if (inc || dec) {
+      const key = (inc || dec).dataset.inc || (inc || dec).dataset.dec;
+      const item = cart.get(key);
+      if (item) {
+        item.qty += inc ? 1 : -1;
+        if (item.qty <= 0) cart.delete(key);
+        renderCart();
+      }
+    }
+    if (event.target.closest('[data-cart-open]')) openCart();
+    if (event.target.closest('[data-cart-close]')) closeCart();
+    if (event.target.closest('[data-modal-close]')) closeModal();
+    const infoLink = event.target.closest('[data-info]');
+    if (infoLink) {
+      event.preventDefault();
+      const [title, body, actions] = info[infoLink.dataset.info];
+      openModal(title, body, actions || [{label:'Close'}]);
+    }
+    const focusLink = event.target.closest('[data-focus-product]');
+    if (focusLink) {
+      const name = focusLink.dataset.focusProduct;
+      setTimeout(() => {
+        document.querySelectorAll('.var').forEach(card => card.classList.remove('is-focused'));
+        const button = [...document.querySelectorAll('.add')].find(btn => btn.dataset.product === name);
+        const card = button && button.closest('.var');
+        if (card) {
+          card.classList.add('is-focused');
+          card.scrollIntoView({behavior:'smooth', block:'center'});
+        }
+      }, 80);
+    }
+    const toggle = event.target.closest('[data-video-toggle]');
+    if (toggle) {
+      const video = toggle.closest('.hero-img').querySelector('video');
+      if (video.paused) {
+        video.play();
+        toggle.textContent = 'Pause';
+      } else {
+        video.pause();
+        toggle.textContent = 'Play';
+      }
+    }
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      closeCart();
+      closeModal();
+    }
+  });
+  renderCart();
+})();
+</script>
 
 </body>
 </html>
