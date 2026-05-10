@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kingpin Gourmet — Fresh truffles, dug today, on your plate tomorrow</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bone:#EFE9DD; --bone-2:#E2DAC9;
+    --char:#0B0A09; --char-2:#161412;
+    --forest:#1F2A1F; --ember:#B8341A; --gold:#A0793A;
+    --green:#7DD3A1; --amber:#E0B255;
+    --rule: rgba(239,233,221,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--char);color:var(--bone);font-family:"Cormorant Garamond",serif;font-weight:400;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--ember);color:var(--bone)}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.04em;text-transform:uppercase;font-size:11px}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+  /* ============ ANNOUNCEMENT BAR ============ */
+  .anno{
+    background:var(--ember);color:var(--bone);text-align:center;padding:9px 22px;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+    position:sticky;top:0;z-index:60;
+  }
+  .anno b{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+  /* ============ NAV ============ */
+  nav.top{
+    display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+    padding:18px 28px;border-bottom:1px solid var(--rule);
+    position:sticky;top:35px;background:rgba(11,10,9,.92);backdrop-filter:blur(12px);z-index:50;
+  }
+  nav.top .left,nav.top .right{display:flex;gap:24px;align-items:center}
+  nav.top .right{justify-content:flex-end}
+  nav.top .brand{
+    font-family:"Cormorant Garamond",serif;font-weight:500;font-size:22px;letter-spacing:.18em;text-transform:uppercase;
+    border:1px solid var(--bone);padding:6px 14px 4px;
+  }
+  nav.top .brand i{font-style:normal;color:var(--ember)}
+  .pill.live{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--rule);padding:7px 12px 6px;border-radius:999px}
+  .pill.live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.4}}
+  .cart{border:1px solid var(--bone);padding:9px 16px 7px;display:inline-flex;gap:10px;align-items:center}
+  .cart b{color:var(--ember);font-family:"IBM Plex Mono",monospace;font-size:11px}
+  .btn-shop{background:var(--ember);color:var(--bone);padding:9px 16px 7px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;display:inline-block}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;padding:0 28px;overflow:hidden;border-bottom:1px solid var(--rule)}
+  .hero-bg{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse at 25% 0%, rgba(184,52,26,.14), transparent 55%),
+      radial-gradient(ellipse at 80% 100%, rgba(31,42,31,.55), transparent 60%),
+      linear-gradient(180deg,#0B0A09 0%, #14110D 60%, #0B0A09 100%);
+  }
+  .hero-noise{position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.91 0 0 0 0 0.83 0 0 0 0.4 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .hero-grid{position:relative;display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center;padding:64px 0 40px}
+  .hero h1{
+    font-family:"Cormorant Garamond",serif;font-weight:300;font-size:clamp(56px,8.6vw,148px);line-height:.9;letter-spacing:-.025em;
+  }
+  .hero h1 em{font-style:italic;color:#C8B68A;font-weight:400}
+  .hero .lede{font-size:19px;line-height:1.5;max-width:38ch;color:#C9C2B2;margin-top:24px;font-weight:300}
+  .hero .lede b{color:var(--bone);font-weight:500}
+
+  /* hero buy block */
+  .hero-buy{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+  .cta-primary{
+    background:var(--ember);color:var(--bone);padding:18px 26px 16px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;
+    display:inline-flex;align-items:center;gap:14px;transition:transform .15s ease;
+  }
+  .cta-primary:hover{transform:translateY(-1px)}
+  .cta-primary span{opacity:.7;font-size:10px}
+  .cta-ghost{
+    border:1px solid var(--bone);padding:18px 26px 16px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  }
+  .hero-trust{
+    margin-top:28px;display:flex;gap:22px;flex-wrap:wrap;color:#A99B7E;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase
+  }
+  .hero-trust span{display:inline-flex;align-items:center;gap:8px}
+  .hero-trust svg{width:14px;height:14px;stroke:var(--green);stroke-width:2;fill:none}
+
+  /* hero image */
+  .img-slot{position:relative;background:#1A1714;border:1px solid var(--rule);overflow:hidden;
+    background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 8px), radial-gradient(ellipse at 30% 30%, rgba(160,121,58,.15), transparent 60%);}
+  .img-slot::after{content:attr(data-shot);position:absolute;inset:auto 14px 14px 14px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#7C736A}
+  .img-slot::before{content:"◐";position:absolute;top:14px;left:14px;font-size:14px;color:#5C544A}
+  .img-slot.has-img::before,.img-slot.has-img::after{display:none}
+  .hero-img{aspect-ratio:4/5;position:relative}
+  .hero-img-tag{position:absolute;top:14px;left:14px;background:var(--char);border:1px solid var(--ember);color:var(--ember);font-family:"IBM Plex Mono",monospace;font-size:10px;padding:5px 9px 4px;letter-spacing:.12em;text-transform:uppercase;z-index:2}
+  .hero-img-meta{position:absolute;bottom:14px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:end;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bone);z-index:2}
+  .hero-img-meta span:last-child{color:var(--bone-2);font-weight:600}
+
+  /* trust strip */
+  .trust-strip{
+    position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+    border-top:1px solid var(--rule);
+  }
+  .trust-strip > div{padding:22px 24px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:6px}
+  .trust-strip > div:last-child{border-right:none}
+  .trust-strip .lab{color:#9C9486;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+  .trust-strip .val{font-family:"Cormorant Garamond",serif;font-size:30px;font-weight:400;letter-spacing:-.01em;line-height:1}
+  .trust-strip .val em{font-style:italic;color:#C8B68A;font-size:.7em}
+
+  /* ============ SECTION CHROME ============ */
+  section{padding:96px 28px;border-top:1px solid var(--rule);position:relative}
+  .sec-head{display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:end;margin-bottom:48px}
+  .sec-head .num{font-family:"IBM Plex Mono",monospace;color:var(--ember);font-size:11px;letter-spacing:.2em}
+  .sec-head h2{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:clamp(36px,4.6vw,68px);line-height:.98;letter-spacing:-.015em;max-width:18ch}
+  .sec-head h2 em{font-style:italic;color:#C8B68A}
+  .sec-head .meta{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9C9486;text-align:right;line-height:1.6}
+
+  /* ============ CATALOG ============ */
+  .var-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .var{position:relative;display:flex;flex-direction:column;background:#100E0C;border:1px solid var(--rule);transition:border-color .2s ease, transform .2s ease}
+  .var:hover{border-color:rgba(239,233,221,.4);transform:translateY(-2px)}
+  .var .ph{aspect-ratio:1/1}
+  .var-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:14px}
+  .var-row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
+  .var .latin{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;color:#9C9486;text-transform:uppercase;margin-bottom:6px}
+  .var h3{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:30px;line-height:1.05;letter-spacing:-.015em}
+  .var h3 em{font-style:italic;color:#C8B68A;display:block;font-size:13px;margin-top:5px;letter-spacing:0;color:#A99B7E}
+  .var .price{font-family:"Cormorant Garamond",serif;font-size:28px;text-align:right;line-height:1;font-weight:500;white-space:nowrap}
+  .var .price small{display:block;font-family:"IBM Plex Mono",monospace;font-size:9px;color:#9C9486;letter-spacing:.1em;text-transform:uppercase;margin-top:4px;font-weight:400}
+  .stock{display:flex;justify-content:space-between;align-items:center;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+  .stock .ok{color:var(--green)}
+  .stock .lim{color:var(--amber)}
+  .stock .out{color:#9C9486}
+  .stock .rev{color:#9C9486;display:inline-flex;gap:4px;align-items:center}
+  .stock .rev b{color:#C8B68A;font-weight:500}
+  .add{
+    width:100%;background:var(--bone);color:var(--char);padding:14px;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+    transition:background .15s ease;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .add:hover{background:var(--ember);color:var(--bone)}
+  .add:hover span{color:rgba(239,233,221,.7)}
+  .add span{color:#7C736A;font-weight:500}
+  .var .badge{position:absolute;top:14px;left:14px;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ember);background:var(--char);padding:5px 9px 4px;letter-spacing:.12em;border:1px solid var(--ember);z-index:2}
+  .var .badge.green{color:var(--green);border-color:var(--green)}
+
+  /* ============ TRUST PILLARS (replaces long hunt + cold-chain) ============ */
+  .pillars{background:#100E0C}
+  .pillars-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--rule)}
+  .pillar{padding:32px 26px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:16px;min-height:240px}
+  .pillar:last-child{border-right:none}
+  .pillar .icon{width:42px;height:42px;border:1px solid var(--bone);display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-size:22px;font-style:italic}
+  .pillar h4{font-family:"Cormorant Garamond",serif;font-size:24px;line-height:1.05;font-weight:400;letter-spacing:-.01em}
+  .pillar p{color:#A99B7E;font-size:14.5px;line-height:1.45;font-weight:300}
+  .pillar .meas{margin-top:auto;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--green);letter-spacing:.1em;text-transform:uppercase}
+
+  /* ============ REVIEWS ============ */
+  .reviews{}
+  .review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .review{border:1px solid var(--rule);padding:28px;background:#100E0C;display:flex;flex-direction:column;gap:18px}
+  .stars{display:flex;gap:3px;color:var(--amber);font-size:14px;letter-spacing:.04em}
+  .review p{font-family:"Cormorant Garamond",serif;font-size:21px;line-height:1.35;font-weight:400}
+  .review p em{font-style:italic;color:#C8B68A}
+  .review .by{margin-top:auto;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9C9486;display:flex;justify-content:space-between;border-top:1px solid var(--rule);padding-top:14px}
+  .review .by b{color:var(--bone);font-weight:600}
+
+  /* aggregate review row */
+  .review-agg{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 22px;border:1px solid var(--rule);margin-bottom:36px;background:#100E0C;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#A99B7E;
+  }
+  .review-agg b{color:var(--bone);font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:500;letter-spacing:0;text-transform:none;margin-right:6px}
+  .review-agg .star{color:var(--amber);font-size:14px;letter-spacing:.05em}
+
+  /* ============ FAQ ============ */
+  .faq{background:#100E0C}
+  .faq-list{border-top:1px solid var(--rule)}
+  details.q{border-bottom:1px solid var(--rule);padding:22px 0}
+  details.q summary{
+    list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:start;gap:24px;
+    font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:400;letter-spacing:-.01em;line-height:1.2;
+  }
+  details.q summary::-webkit-details-marker{display:none}
+  details.q summary::after{
+    content:"+";font-family:"IBM Plex Mono",monospace;font-size:22px;color:var(--ember);transition:transform .2s ease;
+  }
+  details.q[open] summary::after{content:"−"}
+  details.q p{margin-top:14px;color:#A99B7E;font-size:17px;line-height:1.55;font-weight:300;max-width:72ch}
+
+  /* ============ FINAL CTA ============ */
+  .final{padding:120px 28px;text-align:center;background:linear-gradient(180deg,#0B0A09,#1a0d0a 50%,#0B0A09)}
+  .final h2{font-family:"Cormorant Garamond",serif;font-weight:300;font-size:clamp(48px,7vw,108px);line-height:.95;letter-spacing:-.02em}
+  .final h2 em{font-style:italic;color:var(--ember)}
+  .final p{margin-top:18px;color:#C9C2B2;font-size:19px;font-weight:300}
+  .final .hero-buy{justify-content:center;margin-top:36px}
+  .final .hero-trust{justify-content:center;margin-top:28px}
+
+  /* ============ SHOTLIST (still here, compact) ============ */
+  .shotlist{background:var(--bone);color:var(--char)}
+  .shotlist .sec-head h2{color:var(--char)}
+  .shotlist .sec-head h2 em{color:var(--ember)}
+  .shotlist .sec-head .num{color:var(--ember)}
+  .shotlist .sec-head .meta{color:#5C544A}
+  .shot-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid #C8BFAA;border-left:1px solid #C8BFAA}
+  .shot{padding:24px;border-right:1px solid #C8BFAA;border-bottom:1px solid #C8BFAA;display:grid;grid-template-columns:80px 1fr;gap:18px;background:#F4EFE3}
+  .shot .ref{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ember)}
+  .shot .ref small{display:block;color:#5C544A;margin-top:6px;letter-spacing:.1em}
+  .shot h4{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:500;line-height:1.1;margin-bottom:6px;color:var(--char)}
+  .shot h4 em{font-style:italic;color:#5C544A;font-weight:400}
+  .shot p{font-size:14.5px;line-height:1.5;color:#3a342c;font-weight:400;margin-bottom:10px}
+  .shot .prompt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;line-height:1.5;color:#5C544A;background:#EAE2CD;padding:10px 12px;border-left:2px solid var(--ember);text-transform:none;letter-spacing:0}
+  .shot .meta{font-family:"IBM Plex Mono",monospace;font-size:9px;color:#7C736A;letter-spacing:.12em;text-transform:uppercase;margin-top:10px;display:flex;gap:14px;flex-wrap:wrap}
+
+  /* ============ FOOTER ============ */
+  footer{padding:72px 28px 36px;border-top:1px solid var(--rule);background:#08070680}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+  .foot-mark{font-family:"Cormorant Garamond",serif;font-size:84px;line-height:.85;font-weight:300;letter-spacing:-.02em}
+  .foot-mark em{font-style:italic;color:var(--ember)}
+  .foot-mark p{font-size:13px;font-family:"IBM Plex Mono",monospace;color:#9C9486;margin-top:18px;text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+  footer h5{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9C9486;margin-bottom:18px;font-weight:600}
+  footer ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  footer ul a{font-size:17px;color:var(--bone)}
+  footer ul a:hover{color:var(--ember);font-style:italic}
+  .colophon{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--rule);font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#7C736A}
+
+  /* ============ STICKY MOBILE BUY ============ */
+  .sticky-buy{display:none}
+
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:32px;padding:40px 0 24px}
+    .var-grid,.review-grid{grid-template-columns:1fr}
+    .pillars-grid{grid-template-columns:1fr 1fr}
+    .pillar{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);min-height:200px}
+    .pillar:nth-child(2){border-right:none}
+    .pillar:nth-child(3),.pillar:nth-child(4){border-bottom:none}
+    .pillar:last-child{border-right:none}
+    .trust-strip{grid-template-columns:1fr 1fr}
+    .trust-strip > div:nth-child(2){border-right:none}
+    .shot-grid{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr 1fr}
+    nav.top{grid-template-columns:1fr auto}
+    nav.top .left{display:none}
+    .sec-head{grid-template-columns:1fr;gap:16px}
+    .sec-head .meta{text-align:left}
+    section{padding:64px 22px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT -->
+<div class="anno">Free overnight shipping on orders ≥ <b>$120</b> · This week's harvest closes Fri 6pm EST</div>
+
+<!-- NAV -->
+<nav class="top">
+  <div class="left">
+    <a class="mono" href="#shop">Shop</a>
+    <a class="mono" href="#how">How it works</a>
+    <a class="mono" href="#reviews">Reviews</a>
+    <a class="mono" href="#faq">FAQ</a>
+  </div>
+  <a class="brand" href="#">Kingpin<i>·</i>Gourmet</a>
+  <div class="right">
+    <span class="pill live mono">Sourcing live</span>
+    <a class="btn-shop" href="#shop">Shop now →</a>
+    <a class="cart" href="#"><span class="mono">Cart</span><b>02</b></a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="border-top:none;padding-top:0">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-grid">
+    <div>
+      <div class="mono" style="color:#9C9486;margin-bottom:24px">★★★★★ &nbsp;4.9 from 1,847 chefs &amp; home cooks</div>
+      <h1>
+        Dug at <em>dawn.</em><br>
+        On your <em>plate</em><br>
+        by <em>dinner.</em>
+      </h1>
+      <p class="lede">
+        Fresh European truffles, hand-graded and shipped in under <b>36 hours</b> on a temperature-locked cold chain. From <b>$48 for 10g</b> — enough for two pasta nights.
+      </p>
+      <div class="hero-buy">
+        <a class="cta-primary" href="#shop">Shop this week's harvest <span>→</span></a>
+        <a class="cta-ghost" href="#how">How it works</a>
+      </div>
+      <div class="hero-trust">
+        <span><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Free overnight ≥ $120</span>
+        <span><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>36-hour freshness guarantee</span>
+        <span><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>128 Michelin kitchens served</span>
+      </div>
+    </div>
+    <div>
+      <div class="hero-img img-slot has-img" style="background-image:url('assets/hero-truffle.png');background-size:cover;background-position:center">
+        <span class="hero-img-tag">Just dug · Wk 19</span>
+        <div class="hero-img-meta">
+          <span>Tuber Melanosporum · Périgord, FR</span>
+          <span>34.6 g</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-strip">
+    <div><span class="lab">Soil-to-door, median</span><span class="val">31<em> hrs</em></span></div>
+    <div><span class="lab">Hunters on retainer</span><span class="val">47</span></div>
+    <div><span class="lab">In stock this week</span><span class="val">14<em> kinds</em></span></div>
+    <div><span class="lab">On-time, 2025</span><span class="val">99.97<em>%</em></span></div>
+  </div>
+</section>
+
+<!-- CATALOG -->
+<section id="shop">
+  <div class="sec-head">
+    <span class="num">01 — IN STOCK NOW</span>
+    <h2>This week's <em>harvest.</em></h2>
+    <div class="meta">Stock refreshes every 6h<br>Cut &amp; shipped same day</div>
+  </div>
+
+  <div class="var-grid">
+    <article class="var">
+      <span class="badge green">JUST DUG</span>
+      <div class="img-slot ph" data-shot="single summer truffle on parchment, top-down"></div>
+      <div class="var-body">
+        <div class="var-row">
+          <div>
+            <div class="latin">Tuber aestivum · Umbria, IT</div>
+            <h3>Black Summer<em>Hazelnut · hay · cocoa nib</em></h3>
+          </div>
+          <div class="price">$48<small>per 10g</small></div>
+        </div>
+        <div class="stock"><span class="lim">◐ Only 12 left</span><span class="rev">★ <b>4.9</b> · 412</span></div>
+        <button class="add">Add 10g to cart <span>→</span></button>
+      </div>
+    </article>
+
+    <article class="var">
+      <span class="badge">RARE</span>
+      <div class="img-slot ph" data-shot="half-cut bianchetto, marbled interior"></div>
+      <div class="var-body">
+        <div class="var-row">
+          <div>
+            <div class="latin">Tuber borchii · Istria, HR</div>
+            <h3>Bianchetto<em>Garlic · parmesan · pepper</em></h3>
+          </div>
+          <div class="price">$72<small>per 10g</small></div>
+        </div>
+        <div class="stock"><span class="lim">◐ Only 3 left</span><span class="rev">★ <b>4.8</b> · 88</span></div>
+        <button class="add">Add 10g to cart <span>→</span></button>
+      </div>
+    </article>
+
+    <article class="var">
+      <span class="badge green">BEST SELLER</span>
+      <div class="img-slot ph" data-shot="tartufata jar, dark glass, side light"></div>
+      <div class="var-body">
+        <div class="var-row">
+          <div>
+            <div class="latin">Preserved · 80g jar</div>
+            <h3>Tartufata Sauce<em>Mushroom + black truffle</em></h3>
+          </div>
+          <div class="price">$32<small>per jar</small></div>
+        </div>
+        <div class="stock"><span class="ok">● In stock</span><span class="rev">★ <b>4.9</b> · 1,204</span></div>
+        <button class="add">Add to cart <span>→</span></button>
+      </div>
+    </article>
+
+    <article class="var">
+      <div class="img-slot ph" data-shot="truffle butter coin on slate"></div>
+      <div class="var-body">
+        <div class="var-row">
+          <div>
+            <div class="latin">Cultured · 120g</div>
+            <h3>Truffle Butter<em>French cultured · 7% black truffle</em></h3>
+          </div>
+          <div class="price">$28<small>per 120g</small></div>
+        </div>
+        <div class="stock"><span class="ok">● In stock</span><span class="rev">★ <b>4.9</b> · 622</span></div>
+        <button class="add">Add to cart <span>→</span></button>
+      </div>
+    </article>
+
+    <article class="var">
+      <span class="badge">PRO</span>
+      <div class="img-slot ph" data-shot="brass and walnut truffle shaver"></div>
+      <div class="var-body">
+        <div class="var-row">
+          <div>
+            <div class="latin">Tool · brass + walnut</div>
+            <h3>The Shaver<em>Hand-set in Bergamo · lifetime sharpening</em></h3>
+          </div>
+          <div class="price">$184<small>each</small></div>
+        </div>
+        <div class="stock"><span class="ok">● In stock</span><span class="rev">★ <b>5.0</b> · 71</span></div>
+        <button class="add">Add to cart <span>→</span></button>
+      </div>
+    </article>
+
+    <article class="var">
+      <span class="badge">GIFT</span>
+      <div class="img-slot ph" data-shot="open black gift box with three jars + truffle"></div>
+      <div class="var-body">
+        <div class="var-row">
+          <div>
+            <div class="latin">The Hunter's Kit · ships in box</div>
+            <h3>Starter Kit<em>10g aestivum · sauce · oil · shaver</em></h3>
+          </div>
+          <div class="price">$240<small>per kit</small></div>
+        </div>
+        <div class="stock"><span class="ok">● In stock</span><span class="rev">★ <b>4.9</b> · 318</span></div>
+        <button class="add">Add to cart <span>→</span></button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- HUNTER FEATURE -->
+<section class="hunter-feature">
+  <div class="hunter-img" style="background-image:url('assets/hunter.png')">
+    <div class="hunter-overlay">
+      <div class="hunter-tag mono">Marco · Umbria · 23 yrs hunting</div>
+      <h3>Meet the people who <em>actually</em><br>get up at 4am for your dinner.</h3>
+      <p>47 hunters. 6 countries. One Lagotto each. They dig before sunrise, when the aroma is at its loudest, and ship the same morning.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hunter-feature{padding:0;border-top:1px solid var(--rule)}
+  .hunter-img{position:relative;width:100%;aspect-ratio:21/9;background-size:cover;background-position:center;background-color:#0E0C0A}
+  .hunter-overlay{
+    position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:60px 56px;
+    background:linear-gradient(90deg, rgba(11,10,9,.85) 0%, rgba(11,10,9,.5) 45%, rgba(11,10,9,0) 75%);
+  }
+  .hunter-tag{color:var(--ember);margin-bottom:22px}
+  .hunter-overlay h3{font-family:"Cormorant Garamond",serif;font-weight:300;font-size:clamp(36px,5vw,72px);line-height:.98;letter-spacing:-.018em;max-width:18ch}
+  .hunter-overlay h3 em{font-style:italic;color:#C8B68A;font-weight:400}
+  .hunter-overlay p{margin-top:20px;color:#C9C2B2;font-size:18px;line-height:1.5;font-weight:300;max-width:48ch}
+  @media (max-width:900px){
+    .hunter-img{aspect-ratio:4/5}
+    .hunter-overlay{padding:32px 24px;background:linear-gradient(180deg, rgba(11,10,9,.2) 0%, rgba(11,10,9,.85) 60%)}
+  }
+</style>
+
+<!-- HOW IT WORKS / TRUST PILLARS -->
+<section class="pillars" id="how">
+  <div class="sec-head">
+    <span class="num">02 — HOW IT WORKS</span>
+    <h2>Soil to door in <em>31 hours.</em><br>Or it's free.</h2>
+    <div class="meta">Independently audited<br>Chain-of-custody on every box</div>
+  </div>
+
+  <div class="pillars-grid">
+    <div class="pillar">
+      <div class="icon">①</div>
+      <h4>Hunted at dawn.</h4>
+      <p>47 hunters across 6 countries dig between 04:00 and 08:00 — when the aroma is strongest.</p>
+      <span class="meas">+0h · GPS-tagged at dig site</span>
+    </div>
+    <div class="pillar">
+      <div class="icon">②</div>
+      <h4>Graded by hand.</h4>
+      <p>Aroma → firmness → form. Anything off is rejected — we still pay the hunter, so they stay honest.</p>
+      <span class="meas">+5h · Hand-graded, A/Extra</span>
+    </div>
+    <div class="pillar">
+      <div class="icon">③</div>
+      <h4>Cold-packed at +2°C.</h4>
+      <p>Parchment, light vacuum, food-grade gel, EPP foam. The box never sees ambient air over 4°C.</p>
+      <span class="meas">+10h · Δ ≤ 0.4°C, soil → door</span>
+    </div>
+    <div class="pillar">
+      <div class="icon">④</div>
+      <h4>At your door.</h4>
+      <p>Named courier, signature required. SMS with prep notes 30 min before arrival.</p>
+      <span class="meas">+31h · 99.97% on-time</span>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <div class="sec-head">
+    <span class="num">03 — REVIEWS</span>
+    <h2>Why <em>1,847 cooks</em><br>keep coming back.</h2>
+    <div class="meta">Verified buyers only<br>No paid placements</div>
+  </div>
+
+  <div class="review-agg">
+    <span><b>4.9</b> <span class="star">★★★★★</span> &nbsp; 1,847 verified reviews</span>
+    <span>97% would buy again</span>
+    <span>128 Michelin kitchens · 14 countries</span>
+  </div>
+
+  <div class="review-grid">
+    <div class="review">
+      <div class="stars">★★★★★</div>
+      <p>It is the only place in America where I can <em>order on Tuesday</em> and get something a French farmer would still call fresh on Wednesday.</p>
+      <div class="by"><b>Daniel B.</b> · Chef, NYC</div>
+    </div>
+    <div class="review">
+      <div class="stars">★★★★★</div>
+      <p>Showed up colder than my own fridge, with a <em>handwritten temperature card</em>. The aroma filled the kitchen the second I cut the tape.</p>
+      <div class="by"><b>Mei L.</b> · Home cook, SF</div>
+    </div>
+    <div class="review">
+      <div class="stars">★★★★★</div>
+      <p>I've been buying from them for six years. Two delays in six years. Both times <em>they refunded before I noticed.</em></p>
+      <div class="by"><b>Antoine R.</b> · Restaurant owner, Chicago</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="sec-head">
+    <span class="num">04 — QUESTIONS</span>
+    <h2>Things people <em>ask first.</em></h2>
+    <div class="meta">Need a real human?<br>chefs@kingpingourmet.com</div>
+  </div>
+
+  <div class="faq-list">
+    <details class="q" open>
+      <summary>How fresh is "fresh"?</summary>
+      <p>Median 31 hours from the moment a hunter pulls a truffle from the soil to the moment our courier hands you the box. We guarantee under 36h or refund the order and re-ship.</p>
+    </details>
+    <details class="q">
+      <summary>How much do I need for two people?</summary>
+      <p>10g of fresh truffle is enough for two generous pasta dishes or four eggs-and-truffle plates. For a dinner party of six, order 20–30g.</p>
+    </details>
+    <details class="q">
+      <summary>What if it arrives bad?</summary>
+      <p>Email a single photo within 24 hours. We refund and re-ship from next morning's harvest. No questions, no return shipping. This has happened 0.03% of the time in 2025.</p>
+    </details>
+    <details class="q">
+      <summary>Can I pause or skip a season?</summary>
+      <p>Yes. Subscriptions auto-pause when your favorite variety goes out of season — you'll get an SMS the week before it returns.</p>
+    </details>
+    <details class="q">
+      <summary>Do you ship to Hawaii / Alaska?</summary>
+      <p>Yes, but on a 48h chain via Honolulu/Anchorage. We'll flag any extended-zone surcharge before charging the card.</p>
+    </details>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <h2>Order by <em>Wed 6pm.</em><br>Eat truffle <em>Friday.</em></h2>
+  <p>This week's harvest closes Friday 6pm EST. Next dispatch lands Tuesday.</p>
+  <div class="hero-buy">
+    <a class="cta-primary" href="#shop">Shop this week's harvest <span>→</span></a>
+    <a class="cta-ghost" href="#how">How it works</a>
+  </div>
+  <div class="hero-trust">
+    <span><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--green);stroke-width:2;fill:none"><path d="M5 12l5 5L20 7"/></svg>Free overnight ≥ $120</span>
+    <span><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--green);stroke-width:2;fill:none"><path d="M5 12l5 5L20 7"/></svg>36-hour guarantee</span>
+    <span><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--green);stroke-width:2;fill:none"><path d="M5 12l5 5L20 7"/></svg>★ 4.9 / 1,847 reviews</span>
+  </div>
+</section>
+
+<!-- SHOTLIST -->
+<section class="shotlist">
+  <div class="sec-head">
+    <span class="num">APPENDIX — ASSETS BRIEF</span>
+    <h2>Photos &amp; videos to <em>generate.</em></h2>
+    <div class="meta">Prompts ready to paste<br>10 stills · 3 videos</div>
+  </div>
+
+  <div class="shot-grid">
+    <div class="shot">
+      <div><div class="ref">SHOT 01<small>HERO · STILL</small></div></div>
+      <div>
+        <h4>Hero truffle <em>(done — your photo works)</em></h4>
+        <p>Single black truffle on slate, raking light. You already have this slotted in.</p>
+        <div class="prompt">"Editorial food photo, single fresh black Périgord truffle on textured black slate, single hard light from upper left, deep shadows, 85mm macro, dust particles in air, faint warm gold rim light, char + bone + ember palette, kinfolk meets noma cookbook"</div>
+        <div class="meta"><span>Format: 4:5</span><span>Use: hero</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">SHOT 02<small>PRODUCT · CARD 1</small></div></div>
+      <div>
+        <h4>Black Summer on parchment</h4>
+        <p>Top-down product shot, single truffle on crinkled unbleached parchment with handwritten weight tag.</p>
+        <div class="prompt">"Top-down product photo, single fresh Tuber aestivum black summer truffle on crumpled unbleached brown parchment paper, small handwritten paper weight tag '34.6 g · Umbria 04/26', soft north-window light, dark walnut backdrop, editorial deli aesthetic"</div>
+        <div class="meta"><span>Format: 1:1</span><span>Use: card</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">SHOT 03<small>PRODUCT · CARD 2</small></div></div>
+      <div>
+        <h4>Bianchetto, half-cut</h4>
+        <p>Macro of one bianchetto sliced in half, marbled interior facing camera.</p>
+        <div class="prompt">"Macro photo, fresh Bianchetto Tuber borchii white truffle cut in half showing creamy marbled interior with fine veining, on dark slate, single side light, 100mm macro f/5.6, scientific anatomy book aesthetic"</div>
+        <div class="meta"><span>Format: 1:1</span><span>Use: card</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">SHOT 04<small>PRODUCT · CARD 3</small></div></div>
+      <div>
+        <h4>Tartufata jar</h4>
+        <p>Squat dark amber glass jar, cream label, black wax seal. No props.</p>
+        <div class="prompt">"Studio product photograph, squat dark amber glass jar of black truffle tartufata sauce, minimalist cream label with serif typography, black wax seal on lid, on warm grey concrete surface, single soft light from camera right, apothecary editorial aesthetic"</div>
+        <div class="meta"><span>Format: 1:1</span><span>Use: card</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">SHOT 05<small>PRODUCT · CARD 4</small></div></div>
+      <div>
+        <h4>Truffle butter coin</h4>
+        <p>Hand-rolled coin of cultured butter speckled with truffle, on dark slate, one slice taken.</p>
+        <div class="prompt">"Macro food photo, single hand-rolled disc of cultured French butter speckled with shaved black truffle, on rough dark slate, one slice already taken with knife mark visible, condensation, single warm side light, editorial restaurant style"</div>
+        <div class="meta"><span>Format: 1:1</span><span>Use: card</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">SHOT 06<small>PRODUCT · CARD 5</small></div></div>
+      <div>
+        <h4>Truffle shaver</h4>
+        <p>Heritage tool isolated on dark linen, single hard side light.</p>
+        <div class="prompt">"Heritage product photograph, brass and dark walnut truffle shaver, hand-forged, isolated on dark linen fabric, single hard side light from left, deep shadow, 90mm macro, looks like a 1920s watchmaker's tool"</div>
+        <div class="meta"><span>Format: 1:1</span><span>Use: card</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">SHOT 07<small>PRODUCT · CARD 6</small></div></div>
+      <div>
+        <h4>Starter kit, open</h4>
+        <p>Top-down: matte black gift box open with three jars, wrapped truffle, brass shaver, hand-numbered card.</p>
+        <div class="prompt">"Top-down photograph of luxury matte black gift box open, custom dark grey foam insert holding three small dark glass jars, one fresh black truffle wrapped in parchment, brass and walnut truffle shaver, hand-numbered cream paper card '№ 0419', editorial gift guide style"</div>
+        <div class="meta"><span>Format: 1:1</span><span>Use: card</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">SHOT 08<small>SOCIAL · STILL</small></div></div>
+      <div>
+        <h4>Hunter + Lagotto at dawn <em>(for "How it works" + Instagram)</em></h4>
+        <p>Wide environmental portrait of weathered hunter with Lagotto Romagnolo in misty oak forest at dawn.</p>
+        <div class="prompt">"Cinematic 35mm photograph, weathered male European truffle hunter in waxed Barbour jacket and wool flat cap, kneeling beside curly Lagotto Romagnolo dog in misty oak forest at dawn, low golden raking light through trees, breath visible, dirt on hands holding small black truffle, kodak portra 400"</div>
+        <div class="meta"><span>Format: 4:5</span><span>Use: social / about</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">SHOT 09<small>UGC · STILL</small></div></div>
+      <div>
+        <h4>The cold-chain box, open <em>(for reviews / unboxing)</em></h4>
+        <p>Top-down of opened shipping box with foam insert, vacuum-sealed truffle, and handwritten temp card.</p>
+        <div class="prompt">"Top-down photograph of opened premium shipping box, custom black EPP foam insert, single fresh black truffle in clear vacuum sealed bag, ice gel pack, paper temperature data card with handwritten readings '+1.8°C / +2.1°C / +1.9°C', QR sticker, hyper-real editorial unboxing"</div>
+        <div class="meta"><span>Format: 4:5</span><span>Use: trust / ads</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">SHOT 10<small>LIFESTYLE · STILL</small></div></div>
+      <div>
+        <h4>Tajarin being shaved <em>(retargeting ad)</em></h4>
+        <p>Overhead, hands shaving truffle over hand-cut yellow tajarin pasta, steam rising.</p>
+        <div class="prompt">"Overhead motion food photograph, hands holding brass truffle shaver over nest of hand-cut yellow tajarin pasta in butter on dark ceramic plate, paper-thin black truffle slices captured mid-fall, visible steam, dark stained wood table, slight motion blur on falling slices, michelin restaurant editorial"</div>
+        <div class="meta"><span>Format: 1:1</span><span>Use: ads / IG</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">VIDEO 01<small>HERO LOOP · 6s</small></div></div>
+      <div>
+        <h4>Slow rotation of a single truffle</h4>
+        <p>Macro turntable shot — could replace the static hero. Loops seamlessly.</p>
+        <div class="prompt">"6-second seamless loop, macro shot of single fresh black Périgord truffle slowly rotating on dark slate turntable, single hard raking light from upper left revealing surface texture, dust particles in shaft of light, completely black background, cinematic 4K, can loop without cut"</div>
+        <div class="meta"><span>Format: 4:5 · 6s loop</span><span>Use: hero alt</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">VIDEO 02<small>SOCIAL · 8s</small></div></div>
+      <div>
+        <h4>The shave <em>(highest-converting social hook)</em></h4>
+        <p>Slow-mo brass shaver gliding once across a truffle, paper-thin slice falling to a black plate.</p>
+        <div class="prompt">"8-second slow motion video, 240fps, brass and walnut truffle shaver gliding once across surface of fresh black truffle, paper-thin slice peeling and falling slowly to matte black ceramic plate below, single warm tungsten side light, audio of soft scrape and the slice landing, dark background, michelin pass aesthetic"</div>
+        <div class="meta"><span>Format: 9:16 · 8s</span><span>Use: TikTok / Reels</span></div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <div><div class="ref">VIDEO 03<small>UNBOX · 10s</small></div></div>
+      <div>
+        <h4>The arrival</h4>
+        <p>Hands open the cold-chain box, fog rises off the gel pack. Sells "this just landed."</p>
+        <div class="prompt">"10-second product reveal video, overhead static shot, hands cutting tape on premium matte black shipping box, lifting lid, lifting single vacuum-sealed black truffle from custom foam insert, visible cold fog rising from gel pack, dark walnut table, single soft overhead light, packaging and ice sounds, editorial unboxing"</div>
+        <div class="meta"><span>Format: 9:16 · 10s</span><span>Use: cart-abandon ad</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-mark">
+      Kingpin<em>·</em>Gourmet
+      <p>Est. 2008 · Sofia · NYC</p>
+    </div>
+    <div>
+      <h5>Shop</h5>
+      <ul>
+        <li><a href="#">Fresh truffles</a></li>
+        <li><a href="#">Sauces &amp; oils</a></li>
+        <li><a href="#">Tools</a></li>
+        <li><a href="#">Gift kits</a></li>
+        <li><a href="#">Subscribe</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>The House</h5>
+      <ul>
+        <li><a href="#">How it works</a></li>
+        <li><a href="#">Hunters</a></li>
+        <li><a href="#">Wholesale</a></li>
+        <li><a href="#">Track order</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:hello@kingpingourmet.com">hello@kingpingourmet.com</a></li>
+        <li><a href="tel:+18889875533">+1 888 987 5533</a></li>
+        <li><a href="#">Chef line · 24h</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="colophon">
+    <span>© 2026 Kingpin Gourmet · Terra Ross Ltd</span>
+    <span>Privacy · Terms · Shipping</span>
+  </div>
+</footer>
+
+</body>
+</html>
