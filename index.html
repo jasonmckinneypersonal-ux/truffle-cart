@@ -291,6 +291,7 @@
 <nav class="top">
   <div class="left">
     <a class="mono" href="#shop">Shop</a>
+    <a class="mono" href="#origin">Origin</a>
     <a class="mono" href="#how">How it works</a>
     <a class="mono" href="#reviews">Reviews</a>
     <a class="mono" href="#faq">FAQ</a>
@@ -477,16 +478,73 @@
   .hunter-overlay h3{font-family:"Cormorant Garamond",serif;font-weight:300;font-size:clamp(36px,5vw,72px);line-height:.98;letter-spacing:-.018em;max-width:18ch}
   .hunter-overlay h3 em{font-style:italic;color:#C8B68A;font-weight:400}
   .hunter-overlay p{margin-top:20px;color:#C9C2B2;font-size:18px;line-height:1.5;font-weight:300;max-width:48ch}
+  .origin{background:#0F0D0B;border-top:1px solid var(--rule);overflow:hidden}
+  .origin-grid{display:grid;grid-template-columns:.9fr 1.25fr;gap:64px;align-items:start}
+  .origin .num{font-family:"IBM Plex Mono",monospace;color:var(--ember);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px;display:block}
+  .origin h2{font-family:"Cormorant Garamond",serif;font-weight:300;font-size:clamp(44px,6vw,92px);line-height:.92;letter-spacing:-.02em;max-width:9ch}
+  .origin h2 em{font-style:italic;color:#C8B68A;font-weight:400}
+  .origin-copy{border-left:1px solid var(--rule);padding-left:34px;display:flex;flex-direction:column;gap:22px}
+  .origin-copy p{font-size:24px;line-height:1.34;color:#C9C2B2;font-weight:300}
+  .origin-copy p:first-child{color:var(--bone);font-size:30px;line-height:1.2}
+  .origin-copy em{font-style:italic;color:#C8B68A}
+  .origin-ledger{margin-top:36px;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--rule)}
+  .origin-ledger div{padding:20px;border-right:1px solid var(--rule);min-height:158px}
+  .origin-ledger div:last-child{border-right:none}
+  .origin-ledger span{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ember)}
+  .origin-ledger strong{display:block;margin-top:12px;font-family:"Cormorant Garamond",serif;font-size:25px;font-weight:400;line-height:1.05}
+  .origin-ledger p{margin-top:10px;color:#9C9486;font-size:14px;line-height:1.4}
   @media (max-width:900px){
     .hunter-img{aspect-ratio:4/5}
     .hunter-overlay{padding:32px 24px;background:linear-gradient(180deg, rgba(11,10,9,.2) 0%, rgba(11,10,9,.85) 60%)}
+    .origin-grid{grid-template-columns:1fr;gap:28px}
+    .origin h2{max-width:12ch}
+    .origin-copy{border-left:none;padding-left:0}
+    .origin-copy p,.origin-copy p:first-child{font-size:21px;line-height:1.35}
+    .origin-ledger{grid-template-columns:1fr}
+    .origin-ledger div{border-right:none;border-bottom:1px solid var(--rule)}
+    .origin-ledger div:last-child{border-bottom:none}
   }
 </style>
+
+<!-- ORIGIN STORY -->
+<section class="origin" id="origin">
+  <div class="origin-grid">
+    <div>
+      <span class="num">02 — ORIGIN STORY</span>
+      <h2>The chef met <em>the Kingpin.</em></h2>
+    </div>
+    <div>
+      <div class="origin-copy">
+        <p>It started after midnight in a closed Manhattan kitchen, over a plate of tajarin that smelled like wet oak, butter, and trouble.</p>
+        <p>The chef knew the standard: a truffle should stop service for a second. It should make the room quiet. It should never arrive tired, wet, or dead from a warehouse fridge.</p>
+        <p>The other man never gave his full name. Hunters called him <em>the Kingpin</em> because impossible ingredients appeared when he picked up the phone. Not contraband. Not theater. Just paid hunters, clean manifests, cold boxes, and couriers moving before sunrise.</p>
+        <p>They made one rule: if it would not make a chef shave twice, it would not ship once.</p>
+      </div>
+      <div class="origin-ledger">
+        <div>
+          <span>The Chef</span>
+          <strong>set the palate.</strong>
+          <p>Aroma first. Firmness second. Pretty never outranks alive.</p>
+        </div>
+        <div>
+          <span>The Kingpin</span>
+          <strong>built the route.</strong>
+          <p>Hunters on retainer, boxes at +2°C, couriers booked before the market opens.</p>
+        </div>
+        <div>
+          <span>The Pact</span>
+          <strong>ship only loud truffles.</strong>
+          <p>If the box opens quiet, we refund it and send the next dig.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- HOW IT WORKS / TRUST PILLARS -->
 <section class="pillars" id="how">
   <div class="sec-head">
-    <span class="num">02 — HOW IT WORKS</span>
+    <span class="num">03 — HOW IT WORKS</span>
     <h2>Soil to door in <em>31 hours.</em><br>Or it's free.</h2>
     <div class="meta">Independently audited<br>Chain-of-custody on every box</div>
   </div>
@@ -522,7 +580,7 @@
 <!-- REVIEWS -->
 <section class="reviews" id="reviews">
   <div class="sec-head">
-    <span class="num">03 — REVIEWS</span>
+    <span class="num">04 — REVIEWS</span>
     <h2>Why <em>1,847 cooks</em><br>keep coming back.</h2>
     <div class="meta">Verified buyers only<br>No paid placements</div>
   </div>
@@ -588,7 +646,7 @@
 <!-- FAQ -->
 <section class="faq" id="faq">
   <div class="sec-head">
-    <span class="num">04 — QUESTIONS</span>
+    <span class="num">05 — QUESTIONS</span>
     <h2>Things people <em>ask first.</em></h2>
     <div class="meta">Need a real human?<br>chefs@kingpingourmet.com</div>
   </div>
@@ -652,6 +710,7 @@
     <div>
       <h5>The House</h5>
       <ul>
+        <li><a href="#origin">Origin story</a></li>
         <li><a href="#how">How it works</a></li>
         <li><a href="#hunters">Hunters</a></li>
         <li><a href="mailto:chefs@kingpingourmet.com?subject=Wholesale%20truffle%20account">Wholesale</a></li>
