@@ -17,7 +17,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  html,body{background:var(--char);color:var(--bone);font-family:"Cormorant Garamond",serif;font-weight:400;-webkit-font-smoothing:antialiased}
+  html,body{background:var(--char);color:var(--bone);font-family:"Cormorant Garamond",serif;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   ::selection{background:var(--ember);color:var(--bone)}
   .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.04em;text-transform:uppercase;font-size:11px}
   a{color:inherit;text-decoration:none}
@@ -222,6 +222,7 @@
   .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
   .foot-mark{font-family:"Cormorant Garamond",serif;font-size:84px;line-height:.85;font-weight:300;letter-spacing:-.02em}
   .foot-mark em{font-style:italic;color:var(--ember)}
+  .brand-break{display:none}
   .foot-mark p{font-size:13px;font-family:"IBM Plex Mono",monospace;color:#9C9486;margin-top:18px;text-transform:uppercase;letter-spacing:.12em;font-weight:500}
   footer h5{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9C9486;margin-bottom:18px;font-weight:600}
   footer ul{list-style:none;display:flex;flex-direction:column;gap:10px}
@@ -233,9 +234,10 @@
   .sticky-buy{display:none}
 
   .cart-overlay,.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.56);z-index:95;opacity:0;pointer-events:none;transition:opacity .2s ease}
-  .cart-panel{position:fixed;top:0;right:0;width:min(420px,100vw);height:100vh;background:#100E0C;border-left:1px solid var(--rule);z-index:100;transform:translateX(100%);transition:transform .24s ease;display:flex;flex-direction:column}
+  .cart-panel{position:fixed;top:0;right:0;width:min(420px,100vw);height:100vh;background:#100E0C;border-left:1px solid var(--rule);z-index:100;transform:translateX(100%);transition:transform .24s ease;display:flex;flex-direction:column;visibility:hidden}
   body.cart-open .cart-overlay{opacity:1;pointer-events:auto}
-  body.cart-open .cart-panel{transform:translateX(0)}
+  body.cart-open .cart-panel{transform:translateX(0);visibility:visible}
+  body.cart-open{overflow:hidden}
   .cart-head{display:flex;align-items:center;justify-content:space-between;padding:22px;border-bottom:1px solid var(--rule)}
   .cart-head h3{font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:400;letter-spacing:-.01em}
   .icon-btn{width:34px;height:34px;border:1px solid var(--rule);display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:18px}
@@ -264,21 +266,88 @@
   footer .colophon a:hover{color:var(--ember)}
 
   @media (max-width:900px){
-    .hero-grid{grid-template-columns:1fr;gap:32px;padding:40px 0 24px}
-    .var-grid,.review-grid,.proof-media{grid-template-columns:1fr}
-    .pillars-grid{grid-template-columns:1fr 1fr}
-    .pillar{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);min-height:200px}
-    .pillar:nth-child(2){border-right:none}
-    .pillar:nth-child(3),.pillar:nth-child(4){border-bottom:none}
-    .pillar:last-child{border-right:none}
+    .anno{position:static;padding:8px 14px;font-size:10px;line-height:1.45;letter-spacing:.14em}
+    nav.top{
+      top:0;
+      grid-template-columns:1fr auto;
+      grid-template-areas:
+        "brand actions"
+        "links links";
+      gap:12px 14px;
+      padding:12px 16px 10px;
+    }
+    nav.top .brand{grid-area:brand;justify-self:start;font-size:clamp(16px,4.9vw,21px);letter-spacing:.11em;padding:7px 10px 5px;max-width:calc(100vw - 88px);white-space:nowrap}
+    nav.top .left{grid-area:links;display:flex;gap:18px;overflow-x:auto;white-space:nowrap;padding:2px 0 1px;scrollbar-width:none}
+    nav.top .left::-webkit-scrollbar{display:none}
+    nav.top .right{grid-area:actions;justify-content:flex-end;gap:0}
+    nav.top .right .pill.live,nav.top .right .btn-shop{display:none}
+    .cart{padding:8px 10px 7px;gap:7px}
+    .cart .mono{font-size:10px}
+    .hero{padding:0 18px}
+    .hero-grid{grid-template-columns:1fr;gap:28px;padding:38px 0 24px}
+    .hero h1{font-size:clamp(52px,18vw,78px);line-height:.92}
+    .hero .lede{font-size:18px;line-height:1.48;max-width:none}
+    .hero-buy{flex-direction:column;gap:10px;margin-top:28px}
+    .cta-primary,.cta-ghost{width:100%;justify-content:center;text-align:center;padding:16px 18px 14px;font-size:11px;letter-spacing:.14em}
+    .hero-trust{flex-direction:column;gap:12px;margin-top:24px}
+    .hero-img-tag,.hero-img-toggle{top:12px}
+    .hero-img-tag{left:12px}
+    .hero-img-toggle{right:12px}
+    .hero-img-meta{left:12px;right:12px;bottom:12px;flex-direction:column;align-items:flex-start;gap:6px;line-height:1.35}
     .trust-strip{grid-template-columns:1fr 1fr}
-    .trust-strip > div:nth-child(2){border-right:none}
+    .trust-strip > div{padding:16px 14px;min-height:92px}
+    .trust-strip .lab{font-size:9px;line-height:1.35;letter-spacing:.12em}
+    .trust-strip .val{font-size:27px}
+    .var-grid,.review-grid,.proof-media{grid-template-columns:1fr}
+    .var-grid{gap:18px}
+    .var-body{padding:16px}
+    .var-row{grid-template-columns:1fr;gap:10px}
+    .var h3{font-size:28px}
+    .var .price{text-align:left;font-size:26px;display:flex;align-items:baseline;gap:8px}
+    .var .price small{display:inline;margin-top:0}
+    .stock{align-items:flex-start;gap:10px;flex-wrap:wrap;line-height:1.35}
+    .add{min-height:50px;padding:14px 16px}
+    .pillars-grid{grid-template-columns:1fr}
+    .pillar{border-right:none;border-bottom:1px solid var(--rule);min-height:auto;padding:26px 22px}
+    .pillar:nth-child(2),.pillar:nth-child(3),.pillar:nth-child(4),.pillar:last-child{border-right:none;border-bottom:1px solid var(--rule)}
+    .pillar:last-child{border-bottom:none}
+    .review-agg{flex-direction:column;align-items:flex-start;gap:8px;line-height:1.45}
+    .proof-media{gap:18px}
+    .proof-card .visual.tall{aspect-ratio:4/5}
+    .proof-card .copy{padding:16px}
+    .proof-card h4{font-size:26px}
+    .final{padding:82px 18px 88px}
+    .final h2{font-size:clamp(44px,13vw,64px);line-height:1}
+    .final p{font-size:18px;line-height:1.45}
     .foot-grid{grid-template-columns:1fr 1fr}
-    nav.top{grid-template-columns:1fr auto}
-    nav.top .left{display:none}
+    .foot-mark{font-size:56px}
+    .foot-mark .brand-break{display:block}
+    .colophon{flex-direction:column;align-items:flex-start;gap:12px;line-height:1.5}
     .sec-head{grid-template-columns:1fr;gap:16px}
+    .sec-head h2{font-size:clamp(38px,12vw,52px)}
     .sec-head .meta{text-align:left}
-    section{padding:64px 22px}
+    section{padding:58px 18px}
+    .cart-panel{left:0;right:auto;width:100vw;max-width:100vw;height:100dvh;transform:translateX(100%)}
+    body.cart-open .cart-panel{transform:translateX(0)}
+    .modal{width:calc(100vw - 28px);max-height:calc(100dvh - 28px);overflow:auto}
+  }
+
+  @media (max-width:520px){
+    .hero{padding:0 16px}
+    section{padding:52px 16px}
+    .var{margin-inline:0}
+    .foot-grid{grid-template-columns:1fr;gap:32px}
+    .foot-mark{font-size:clamp(48px,16vw,60px);line-height:.9}
+    .review p{font-size:20px}
+    details.q summary{font-size:23px}
+    .toast{width:calc(100vw - 32px);text-align:center}
+  }
+
+  @media (max-width:380px){
+    nav.top .brand{font-size:15px;letter-spacing:.09em}
+    .cart .mono{display:none}
+    .hero h1{font-size:clamp(48px,17vw,64px)}
+    .cta-primary,.cta-ghost{letter-spacing:.1em}
   }
 </style>
 </head>
@@ -499,7 +568,8 @@
     .origin-grid{grid-template-columns:1fr;gap:28px}
     .origin h2{max-width:12ch}
     .origin-copy{border-left:none;padding-left:0}
-    .origin-copy p,.origin-copy p:first-child{font-size:21px;line-height:1.35}
+    .origin-copy p{font-size:20px;line-height:1.42}
+    .origin-copy p:first-child{font-size:22px;line-height:1.32}
     .origin-ledger{grid-template-columns:1fr}
     .origin-ledger div{border-right:none;border-bottom:1px solid var(--rule)}
     .origin-ledger div:last-child{border-bottom:none}
@@ -694,7 +764,7 @@
 <footer>
   <div class="foot-grid">
     <div class="foot-mark">
-      Kingpin<em>·</em>Gourmet
+      Kingpin<em>·</em><span class="brand-break"></span>Gourmet
       <p>Est. 2008 · Sofia · NYC</p>
     </div>
     <div>
